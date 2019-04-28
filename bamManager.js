@@ -75,10 +75,10 @@ async function addMoreInventory(){
     const answers= await inquirer
         .prompt([
             {
-            message:"What product would you like to add inventory?",
+            message:"Select Product to add inventory?",
             type:"list",
             name:"userChoice",
-            choices:allProducts.map(item=>"item_id: "+item.item_id+", "+item.product_name+': '+item.stock_quantity)
+            choices:allProducts.map(item=>"item_id: "+item.item_id+", "+item.product+': '+item.qty)
             },
             {
                 message:"How many would you like to add?",
@@ -90,7 +90,7 @@ async function addMoreInventory(){
     const item_id = answers.userChoice.slice(9).split(',')[0];
     
     await changeQuantityForProduct (item_id,-parseInt(answers.addQuantity));
-    console.log("successfully added!")
+    console.log(answers.addQuantity + " Successfully added!")
 }
 
 
