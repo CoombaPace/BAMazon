@@ -177,7 +177,7 @@ function addNewDepartmentToDB(departmentName,overhead){
         try{
             results = await pool.query(
                 `INSERT INTO ?? SET ?`,
-                ["departments",{department_name:departmentName,overhead:overhead}])
+                ["departments",{department:departmentName,overhead:overhead}])
             res(results);
         }catch(err){
             console.error(err);

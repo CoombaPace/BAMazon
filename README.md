@@ -8,4 +8,6 @@
     * View Low Inventory Products
     * Add Product Inventory
     * Add New Products
-* Supervisor
+* Supervisor - Supervisors can:
+    * See Total Sales by Dept.
+    * Add a New Dept.
