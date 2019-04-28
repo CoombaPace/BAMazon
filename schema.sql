@@ -1,0 +1,26 @@
+
+DROP DATABASE IF EXISTS bamazon;
+CREATE DATABASE IF NOT EXISTS bamazon;
+
+USE bamazon;
+
+CREATE TABLE IF NOT EXISTS products(
+item_id INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+product VARCHAR(200) NOT NULL,
+dept_id INT,
+price DECIMAL(8,2),
+qty INT NOT NULL,
+product_sales FLOAT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS departments(
+dept_id INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
+department VARCHAR(100) NOT NULL,
+overhead INT NOT NULL
+);
+
+ALTER TABLE products
+-- ADD COLUMN product_sales FLOAT NOT NULL DEFAULT 0,
+-- CHANGE COLUMN department dept_id INT,
+ADD CONSTRAINT FK_DepartmentID
+FOREIGN KEY (dept_id) REFERENCES departments(dept_id);
