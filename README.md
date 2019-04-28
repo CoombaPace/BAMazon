@@ -1,7 +1,7 @@
-## BAMazon
-# A storefront built with Node.js and MySQL. Includes a customer interface, as well as manager and supervisor capabilities.
+# BAMazon
+## A storefront built with Node.js and MySQL. Includes a customer interface, as well as manager and supervisor capabilities.
 
-# Interfaces
+### Interfaces
 * Customer - Currently, a customer can only buy items and view their total. Customers select the item by *item_id*, easily referenced by the auto generated *Available Products* Table.
 * Manager - A Manager can:
     * View Products for Sale
