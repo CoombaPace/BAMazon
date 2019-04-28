@@ -27,15 +27,15 @@ async function  mainAsync(){
         ]);
     switch (answers.userChoice){
         case options[0]:
-            loader = setLoader("Loading products");
+            loader = setLoader("Loading Products");
             const allProducts = await getAll();
             cancelLoader(loader);
 
-            process.stdout.write('Available products: \n');
+            process.stdout.write('Available Products: \n');
             console.log(makeTable(allProducts));
             break;
         case options[1]:
-            loader = setLoader("Loading prducts with low inventory");
+            loader = setLoader("Loading products with low inventory");
             const lowQuantityItems = await queryLowInventory(5);
             cancelLoader(loader);
             
