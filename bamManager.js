@@ -35,6 +35,7 @@ async function  mainAsync(){
             console.log(makeTable(allProducts));
             break;
         case options[1]:
+        // BUG: If there are 0 products with low inventory, it will throw an error.
             loader = setLoader("Loading products with low inventory");
             const lowQuantityItems = await queryLowInventory(5);
             cancelLoader(loader);
