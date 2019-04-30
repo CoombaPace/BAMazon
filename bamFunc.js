@@ -81,7 +81,7 @@ function changeQuantityForProduct(item_id,qty){
         
   })
 }
-
+// BUG: If there are 0 products with low inventory, it will throw an error.
 function queryLowInventory(lowQuantity){
   return new Promise(async(res, rej)=>{
       try{
