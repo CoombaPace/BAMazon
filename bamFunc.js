@@ -1,3 +1,7 @@
+//==================================================================//
+//          REQUIREMENTS & CONNECTIONS
+//==================================================================//
+
 const mysql = require('mysql');
 const util = require('util');
 
@@ -13,7 +17,9 @@ const pool = mysql.createPool({
 pool.getConnection = util.promisify(pool.getConnection);
 pool.query = util.promisify(pool.query);
 
-
+//==================================================================//
+//              FUNCTIONS
+//==================================================================//
 function setLoader(input){
     process.stdout.write(input+"..");
     const loader = setInterval(() => {
@@ -41,22 +47,25 @@ function getAll(){
       
   })
 }
-  
+ 
+//==================================================================//
 
+// ADD INVENTORY
 function changeQuantityForProduct(item_id,qty){
   return new Promise(async (resolve,reject)=>{
       const connection = await pool.getConnection();
-      //TODO promisify
       connection.beginTransaction(function(err) {
           if (err) { reject(err); }
-          connection.query('SELECT * FROM ?? WHERE ? LIMIT 1', ["products",{item_id:item_id}], function (error, results, fields) {
+          connection.query('SELECT * FROM ?? WHERE ? LIMIT 1', ["products", {item_id:item_id}],
+          function (error, results, fields) {
               if (error) {
                   resolve (connection.rollback(function() {
                   reject(error);
                   }));
               }
               
-              let q = connection.query('UPDATE ?? SET ? WHERE ?', ["products",{qty:results[0].qty - qty},{item_id:item_id}], function (error, results, fields) {
+              let q = connection.query('UPDATE ?? SET ? WHERE ?', ["products", {qty:results[0].qty - qty}, {item_id:item_id}],
+              function (error, results, fields) {
               if (error) {
                   console.log(q.sql);
                   
@@ -81,6 +90,9 @@ function changeQuantityForProduct(item_id,qty){
         
   })
 }
+
+//==================================================================//
+//  QUERY LOW INVENTORY
 // BUG: If there are 0 products with low inventory, it will throw an error.
 function queryLowInventory(lowQuantity){
   return new Promise(async(res, rej)=>{
@@ -94,11 +106,14 @@ function queryLowInventory(lowQuantity){
       
   })
 }
+//==================================================================//
 
-function addNewProductToDB(productName,departmentName,price,stockQuantity){
+//      ADD NEW PRODUCT
+function addNewProductToDB(productName, departmentName,price, stockQuantity){
   return new Promise(async(res,rej)=>{
       try{
-          results = await pool.query('INSERT INTO ?? SET ?',["products",{
+          results = await pool.query('INSERT INTO ?? SET ?',
+          ["products",{
             product:productName,
             dept_id:departmentName,
             price:price,
@@ -113,20 +128,23 @@ function addNewProductToDB(productName,departmentName,price,stockQuantity){
   })
 }
 
+//==================================================================//
+
+// CHANGE THE TOTAL SALES OF A DEPT.
 function changeSalesForProduct(item_id,sales){
     return new Promise(async (resolve,reject)=>{
 
         const connection = await pool.getConnection();
 
-
-        //TODO promisify
         connection.beginTransaction(function(err) {
             if (err) { reject(err); }
-            connection.query('SELECT * FROM ?? WHERE ? LIMIT 1', ["products",{item_id:item_id}], function (error, results, fields) {
+            connection.query('SELECT * FROM ?? WHERE ? LIMIT 1', ["products", {item_id:item_id}], 
+            function (error, results, fields) {
                 if (error) {
                     reject(error);
                     };
-                let q = connection.query('UPDATE ?? SET ? WHERE ?', ["products",{product_sales:results[0].product_sales + sales},{item_id:item_id}], function (error, results, fields) {
+                connection.query('UPDATE ?? SET ? WHERE ?', ["products", {product_sales:results[0].product_sales + sales}, {item_id:item_id}], 
+                function (error, results, fields) {
                 if (error) {
                     resolve (connection.rollback(function() {
                         reject(error);
@@ -149,6 +167,9 @@ function changeSalesForProduct(item_id,sales){
     })
   }
 
+//==================================================================//
+
+// QUERY TOTAL SALES BY DEPT.
 function salesByDepartment(){
     return new Promise(async(res,rej)=>{
         try{
@@ -169,9 +190,9 @@ function salesByDepartment(){
     })
   }
 
+//==================================================================//
 
-
-
+// ADD A NEW DEPT.
 function addNewDepartmentToDB(departmentName,overhead){
     return new Promise(async(res,rej)=>{
         try{
@@ -187,7 +208,9 @@ function addNewDepartmentToDB(departmentName,overhead){
     })
 }
 
-
+//==================================================================//
+//          EXPORTS
+//==================================================================//
 
 module.exports={
     pool : pool,

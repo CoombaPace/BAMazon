@@ -1,3 +1,7 @@
+//==================================================================//
+//          REQUIREMENTS & CONNECTIONS
+//==================================================================//
+
 const inquirer = require('inquirer');
 const {makeTable} = require('./tableChalk');
 
@@ -11,11 +15,16 @@ const bamFunc = require('./bamFunc.js')
 , salesByDepartment = bamFunc.salesByDepartment
 , addNewDepartmentToDB = bamFunc.addNewDepartmentToDB;
 
+//==================================================================//
+//          MAIN PROCESSES
+//==================================================================//
 
 mainAsync();
+// MAIN ASYNC FOR A SUPERVISOR ALLOWS FURTHER CHANGES AND QUERIES THAT MANAGERS
+// CAN'T ACCESS.
 
 async function  mainAsync(){
-    const options = ["Product Sales by Department", "Add Department"];
+    const options = ["Product Sales by Dept.", "Add Department"];
     let loader;
     const answers = await inquirer
         .prompt([
@@ -28,7 +37,7 @@ async function  mainAsync(){
         ]);
     switch (answers.userChoice){
         case options[0]:
-            loader = setLoader("Loading all department");
+            loader = setLoader("Loading departments...");
             const allProducts = await salesByDepartment();
             cancelLoader(loader);
             
@@ -44,7 +53,7 @@ async function  mainAsync(){
     const confirm = await inquirer
         .prompt([
             {
-            message:"Would you like to perform more actions?",
+            message:"Would you like to do anything else?",
             type:"confirm",
             name:"more"
             }
@@ -57,27 +66,28 @@ async function  mainAsync(){
     }
 }
 
+//==================================================================//
+//              FUNCTIONS
+//==================================================================//
 
+// ADD A NEW DEPT. TO THE DB.
 async function addDepartment(){
-
-
     const answers= await inquirer
         .prompt([
             {
-            message:"What is the name of the department would you like to add?",
+            message:"Enter the department name.",
             type:"input",
             name:"departmentName",
             validate: input => {return input.length <= 100}
             },
             {
-                message:"What is the overhead cost of the Department?",
+                message:"What is this deptartment's overhead?",
                 type:"input",
                 name:"overhead",
                 validate: input => {return !isNaN(parseFloat(input))}
             }
     ]);
-    await addNewDepartmentToDB(answers.departmentName,answers.overhead)
-    console.log("Added Successfully!")
-
-
+    await addNewDepartmentToDB(answers.departmentName, answers.overhead)
+    console.log("Success!")
 }
+//==================================================================//

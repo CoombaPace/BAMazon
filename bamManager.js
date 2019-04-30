@@ -1,3 +1,7 @@
+//==================================================================//
+//          REQUIREMENTS & CONNECTIONS
+//==================================================================//
+
 const inquirer = require('inquirer');
 const {makeTable} = require('./tableChalk');
 
@@ -10,9 +14,12 @@ const bamFunc = require('./bamFunc.js')
 , setLoader = bamFunc.setLoader
 , cancelLoader = bamFunc.cancelLoader;
 
+//==================================================================//
+//                  MAIN PROCESSES
+//==================================================================//
 
 mainAsync();
-
+// MAIN ASYNC FOR THE MANAGER ALLOWS MANIPULATION OF DATA.
 async function  mainAsync(){
     const options = ["Products for Sale", "Low Inventory", "Add Inventory", "Add New Product"];
     let loader;
@@ -27,7 +34,7 @@ async function  mainAsync(){
         ]);
     switch (answers.userChoice){
         case options[0]:
-            loader = setLoader("Loading Products");
+            loader = setLoader("Loading Products...");
             const allProducts = await getAll();
             cancelLoader(loader);
 
@@ -36,7 +43,7 @@ async function  mainAsync(){
             break;
         case options[1]:
         // BUG: If there are 0 products with low inventory, it will throw an error.
-            loader = setLoader("Loading products with low inventory");
+            loader = setLoader("Loading low inventory...");
             const lowQuantityItems = await queryLowInventory(5);
             cancelLoader(loader);
             
@@ -55,7 +62,7 @@ async function  mainAsync(){
     const confirm = await inquirer
         .prompt([
             {
-            message:"Would you like to perform more actions?",
+            message:"Would you like to make more changes?",
             type:"confirm",
             name:"more"
             }
@@ -68,7 +75,11 @@ async function  mainAsync(){
     }
 }
 
+//==================================================================//
+//                  FUNCTIONS
+//==================================================================//
 
+// ADD INVENTORY
 async function addMoreInventory(){
     const allProducts = await getAll();
 
@@ -76,13 +87,13 @@ async function addMoreInventory(){
     const answers= await inquirer
         .prompt([
             {
-            message:"Select Product to add inventory?",
+            message:"Select Product:",
             type:"list",
             name:"userChoice",
             choices:allProducts.map(item=>"item_id: "+item.item_id+", "+item.product+': '+item.qty)
             },
             {
-                message:"How many would you like to add?",
+                message:"Enter quantity:",
                 type:"input",
                 name:"addQuantity",
                 validate: input => {return !isNaN(parseInt(input))}
@@ -94,27 +105,26 @@ async function addMoreInventory(){
     console.log(answers.addQuantity + " Successfully added!")
 }
 
+//==================================================================//
 
-
-
-
+// ADD PRODUCT
 async function addNewProduct(){
     const answers= await inquirer
         .prompt([
             {
-            message:"What is the name of the product would you like to add?",
+            message:"Enter Product Name:",
             type:"input",
             name:"productName",
             validate: input => {return input.length <= 200}
             },
             {
-                message:"What department does this product belong to?",
+                message:"Enter Department:",
                 type:"input",
                 name:"departmentName",
                 validate: input => {return input.length <= 100}
             },
             {
-                message:"What's the price of this item?",
+                message:"Enter price:",
                 type:"input",
                 name:"price",
                 validate: input => {return input<=999999.99 && input >=0}
@@ -126,7 +136,8 @@ async function addNewProduct(){
                 validate: input => {return !isNaN(parseInt(input))}
             }
     ]);
-    await addNewProductToDB(answers.productName,answers.departmentName,answers.price,answers.stockQuantity)
+    await addNewProductToDB(answers.productName, answers.departmentName, answers.price, answers.stockQuantity)
     console.log("Added Successfully!")
 
 }
+//==================================================================//
