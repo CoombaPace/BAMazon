@@ -18,9 +18,3 @@ dept_id INT UNIQUE AUTO_INCREMENT PRIMARY KEY,
 department VARCHAR(100) NOT NULL,
 overhead INT NOT NULL
 );
-
-ALTER TABLE products
--- ADD COLUMN product_sales FLOAT NOT NULL DEFAULT 0,
--- CHANGE COLUMN department dept_id INT,
-ADD CONSTRAINT FK_DepartmentID
-FOREIGN KEY (dept_id) REFERENCES departments(dept_id);

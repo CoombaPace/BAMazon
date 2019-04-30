@@ -7,9 +7,31 @@ const bamFunc = require('./bamFunc.js')
 , setLoader = bamFunc.setLoader
 , cancelLoader = bamFunc.cancelLoader
 
+function start() {
+    inquirer.prompt([
+    {
+        type: "list",
+        message: "Would you like to [BUY] or [EXIT]?",
+        choices: ["BUY", "EXIT"],
+        name: "BAMazon"
+      }
+ 
+ ]).then(function(res) {
+    console.log(res);
+    if (res.BAMazon === "BUY") {
+        mainAsync();
+    } else {
+        console.log("Good-Bye!");
+        pool.end();
+    }
+ 
+ }).catch(function(err){
+    if(err) throw err;
+ });
+}
 
-mainAsync();
 
+start();
 
 async function  mainAsync(){
     let loader
@@ -23,12 +45,6 @@ async function  mainAsync(){
 
         const answers = await inquirer
             .prompt([
-                // {
-                // type: "list",
-                // message: "[BUY] or [EXIT]?",
-                // choices: ["BUY", "EXIT"],
-                // name: "BAMazon",
-                // },
                 {
                 message:"Enter the item_id of the product you would like to buy.",
                 type:"input",

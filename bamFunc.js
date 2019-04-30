@@ -83,11 +83,11 @@ function changeQuantityForProduct(item_id,qty){
 }
 
 function queryLowInventory(lowQuantity){
-  return new Promise(async(res,rej)=>{
+  return new Promise(async(res, rej)=>{
       try{
-          results = await pool.query('SELECT * FROM ?? WHERE qty<?',["products",lowQuantity])
+          results = await pool.query('SELECT * FROM ?? WHERE qty<?',["products", lowQuantity])
           res(results);
-      }catch(err){
+      } catch(err){
           console.error(err);
           rej(err);
       }
@@ -177,7 +177,7 @@ function addNewDepartmentToDB(departmentName,overhead){
         try{
             results = await pool.query(
                 `INSERT INTO ?? SET ?`,
-                ["departments",{department:departmentName,overhead:overhead}])
+                ["departments", {department:departmentName, overhead:overhead}])
             res(results);
         }catch(err){
             console.error(err);
